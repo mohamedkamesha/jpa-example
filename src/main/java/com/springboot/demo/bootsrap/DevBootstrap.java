@@ -2,8 +2,11 @@ package com.springboot.demo.bootsrap;
 
 import com.springboot.demo.model.Author;
 import com.springboot.demo.model.Book;
+import com.springboot.demo.model.Publisher;
 import com.springboot.demo.repositories.AuthorRepository;
 import com.springboot.demo.repositories.BookRepository;
+import com.springboot.demo.repositories.PublisherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -11,15 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
-   // @Autowired
+    @Autowired
     private AuthorRepository authorRepository;
-  //  @Autowired
+    @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private PublisherRepository publicherRepository;
 
-    public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository) {
+  /*  public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
-    }
+    }*/
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -27,8 +32,11 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     }
 
     private void initData (){
+        Publisher publisher = new Publisher("fooo","landon");
+        publicherRepository.save(publisher);
+
         Author author = new Author("mohamed","mahmoud");
-        Book book = new Book("java","k123","Grad");
+        Book book = new Book("java","k123",publisher);
         author.getBooks().add(book);
         book.getAuthors().add(author);
 
@@ -37,7 +45,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
 
         Author author2 = new Author("kamesha","komesho");
-        Book book2 = new Book("php","var","kam");
+        Book book2 = new Book("php","var",publisher);
         author2.getBooks().add(book2);
 
         authorRepository.save(author2);
